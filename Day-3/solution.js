@@ -9,6 +9,8 @@ const wireOne = new Map();
 
 let coordWireOne = { x: 0, y: 0 };
 let coordWireTwo = { x: 0, y: 0 };
+let stepsWireOne = 0;
+let stepsWireTwo = 0;
 
 wireOneRoute.forEach(e => {
     let num = parseInt(e.match(/\d+/)[0]);
@@ -28,11 +30,13 @@ wireOneRoute.forEach(e => {
             coordWireOne.y--;
         }
 
-        wireOne.set(`${coordWireOne.x},${coordWireOne.y}`, true);
+        stepsWireOne++;
+        wireOne.set(`${coordWireOne.x},${coordWireOne.y}`, stepsWireOne);
     }
 });
 
 const crossings = [];
+const steps = [];
 wireTwoRoute.forEach(e => {
     let num = parseInt(e.match(/\d+/)[0]);
     let dir = e[0];
@@ -51,9 +55,12 @@ wireTwoRoute.forEach(e => {
             coordWireTwo.y--;
         }
 
+        stepsWireTwo++;
+
         let str = `${coordWireTwo.x},${coordWireTwo.y}`;
         if (wireOne.has(str)) {
             crossings.push(str);
+            steps.push(wireOne.get(str) + stepsWireTwo);
         }
     }
 });
@@ -63,4 +70,5 @@ let distances = crossings.map(e => {
     return Math.abs(nums[0]) + Math.abs(nums[1]);
 });
 
-console.log(Math.min(...distances));
+console.log('Part 1: ', Math.min(...distances));
+console.log('Part 2: ', Math.min(...steps));
