@@ -13,19 +13,22 @@ function sorted(num) {
     return newNum;
 }
 
-// PART 1
 let matched = 0;
 for (let i = parseInt(input[0]); i <= parseInt(input[1]); i++) {
-    let numStr = i.toString();
-    let obj = {};
-    for (let char of numStr) {
-        console.log(char);
-        obj[char] ? obj[char]++ : (obj[char] = 1);
-    }
-    console.log(Object.values(obj));
+    if (sorted(i) === i.toString()) {
+        let numStr = i.toString();
+        let count = 0;
+        let doubled = false;
 
-    if (Object.values(obj).includes(2)) {
-        matched++;
+        for (let x = 0; x < numStr.length; x++) {
+            if (numStr[x] === numStr[x + 1] && numStr[x] != numStr[x + 2] && numStr[x] != numStr[x - 1]) {
+                doubled = true;
+            }
+        }
+
+        if (doubled === true) {
+            matched++;
+        }
     }
 }
 
