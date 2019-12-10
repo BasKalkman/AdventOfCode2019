@@ -10,6 +10,7 @@ for (orbit of data) {
     // Init orbits if not yet there
     if (!allOrbits[masses[0]]) {
         allOrbits[masses[0]] = {
+            name: masses[0],
             orbits: null,
             orbittedBy: []
         };
@@ -17,6 +18,7 @@ for (orbit of data) {
 
     if (!allOrbits[masses[1]]) {
         allOrbits[masses[1]] = {
+            name: masses[1],
             orbits: null,
             orbittedBy: []
         };
@@ -38,3 +40,23 @@ for (let mass in allOrbits) {
 
 console.log(orbitCount);
 // END OF PART 1
+let santa = allOrbits['SAN'];
+let santaLoc = allOrbits[santa.orbits];
+
+let me = allOrbits['YOU'];
+let myMap = new Map();
+let myLoc = allOrbits[me.orbits];
+while (myLoc.orbits != null) {
+    myMap.set(myLoc.name, myMap.size);
+    myLoc = allOrbits[myLoc.orbits];
+}
+
+let steps = 0;
+while (santaLoc.orbits != null) {
+    if (myMap.has(santaLoc.name)) {
+        console.log('Part 2 steps: ', steps + myMap.get(santaLoc.name));
+        return;
+    }
+    steps++;
+    santaLoc = allOrbits[santaLoc.orbits];
+}
