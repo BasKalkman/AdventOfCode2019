@@ -1,3 +1,4 @@
+const { IntCodeComputer } = require('../shared/IntcodeComputer');
 const fs = require('fs');
 
 const data = fs
@@ -6,6 +7,10 @@ const data = fs
     .map(Number);
 data[1] = 12;
 data[2] = 2;
+
+const pc = new IntCodeComputer(data);
+
+pc.processCode();
 
 // PART 1
 function checkInput(arr) {
@@ -27,7 +32,7 @@ function checkInput(arr) {
 }
 checkInput(data);
 
-console.log(data[0]);
+console.log('Part1: ', data[0]);
 
 // PART 2
 const p2 = fs
