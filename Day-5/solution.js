@@ -5,5 +5,14 @@ const data = fs
     .split(',')
     .map(Number);
 
-const pc = new IntCodeComputer(data);
-pc.processCode();
+const pc = new IntCodeComputer(data.slice(0));
+pc.setInput(1);
+let resultP1 = pc.processCode();
+
+console.log('Part 1: ', resultP1);
+
+pc.reset();
+pc.setInput(5);
+let resultP2 = pc.processCode();
+
+console.log('Part 2: ', resultP2);
