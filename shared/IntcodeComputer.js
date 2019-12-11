@@ -1,11 +1,26 @@
 class IntCodeComputer {
-    constructor(arr) {
+    constructor(arr, input) {
         this.opcode = 0;
-        this.params = [];
-        this.input = 5;
+        this.input = input || 1;
+        this.changeInputTo = null;
         this.output = 0;
         this.i = 0;
-        this.data = arr;
+        this.data = arr.slice(0);
+        this.resetData = arr.slice(0) || [];
+    }
+
+    changeInput(input, inputChangeTo) {
+        this.input = input;
+        this.changeInputTo = inputChangeTo || null;
+    }
+
+    reset() {
+        this.changeInputTo = null;
+        this.opcode = 0;
+        this.input = 1;
+        this.output = 0;
+        this.i = 0;
+        this.data = this.resetData.slice(0);
     }
 
     processCode() {
@@ -13,9 +28,7 @@ class IntCodeComputer {
             this.parseInstruction(this.data[this.i]);
         }
 
-        console.log('Result at position 0: ', this.data[0]);
-        console.log('Output: ', this.output);
-        return this.data[0];
+        return this.output;
     }
 
     parseInstruction(code) {
@@ -65,6 +78,9 @@ class IntCodeComputer {
         }
     }
 
+    // --------------
+    // OPCODES
+    // --------------
     // Opcode 1
     add(num1, num2, position) {
         this.data[position] = num1 + num2;
@@ -80,6 +96,9 @@ class IntCodeComputer {
     // Opcode 3
     placeInput(position) {
         this.data[position] = this.input;
+        if (this.changeInputTo) {
+            this.input = this.changeInputTo;
+        }
         this.i += 2;
     }
 
