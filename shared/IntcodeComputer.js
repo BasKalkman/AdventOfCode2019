@@ -31,7 +31,7 @@ class IntCodeComputer {
     }
 
     processCode() {
-        while (this.data[this.i] != 99) {
+        while (this.opcode != 99) {
             this.parseInstruction(this.data[this.i]);
         }
 
@@ -52,107 +52,73 @@ class IntCodeComputer {
 
         let position = this.data[this.i + 3];
         switch (this.opcode) {
+            // ADD
             case 1:
-                this.add(num1, num2, position);
+                this.data[position] = num1 + num2;
+                this.i += 4;
                 break;
+            // MULTIPLY
             case 2:
-                this.multiply(num1, num2, position);
+                this.data[position] = num1 * num2;
+                this.i += 4;
                 break;
+            // INPUT
             case 3:
-                this.placeInput(this.data[this.i + 1]);
-                break;
-            case 4:
-                this.placeOutput(num1);
-                break;
-            case 5:
-                this.jumpIfTrue(num1, num2);
-                break;
-            case 6:
-                this.jumpIfFalse(num1, num2);
-                break;
-            case 7:
-                this.lessThan(num1, num2, position);
-                break;
-            case 8:
-                this.itEquals(num1, num2, position);
+                if (this.phase) {
+                    this.data[this.data[this.i + 1]] = this.phase;
+                    this.phase = null;
+                } else {
+                    this.data[this.data[this.i + 1]] = this.input;
+                }
 
+                this.i += 2;
+                break;
+            // OUTPUT
+            case 4:
+                this.output = num1;
+                this.i += 2;
+                break;
+            // JUMP IF TRUE
+            case 5:
+                if (num1 != 0) {
+                    this.i = num2;
+                } else {
+                    this.i += 3;
+                }
+                break;
+            // JUMP IF FALSE
+            case 6:
+                if (num1 === 0) {
+                    this.i = num2;
+                } else {
+                    this.i += 3;
+                }
+                break;
+            // LESS THAN
+            case 7:
+                if (num1 < num2) {
+                    this.data[position] = 1;
+                } else {
+                    this.data[position] = 0;
+                }
+                this.i += 4;
+                break;
+            // EQUAL
+            case 8:
+                if (num1 === num2) {
+                    this.data[position] = 1;
+                } else {
+                    this.data[position] = 0;
+                }
+                this.i += 4;
+                break;
+            // STOP
             case 99:
                 break;
 
             default:
                 break;
         }
-    }
-
-    // --------------
-    // OPCODES
-    // --------------
-    // Opcode 1
-    add(num1, num2, position) {
-        this.data[position] = num1 + num2;
-        this.i += 4;
-    }
-
-    // Opcode 2
-    multiply(num1, num2, position) {
-        this.data[position] = num1 * num2;
-        this.i += 4;
-    }
-
-    // Opcode 3
-    placeInput(position) {
-        if (this.phase) {
-            this.data[position] = this.phase;
-            this.phase = null;
-        } else {
-            this.data[position] = this.input;
-        }
-
-        this.i += 2;
-    }
-
-    // Opcode 4
-    placeOutput(value) {
-        this.output = value;
-        this.i += 2;
-    }
-
-    // Opcode 5 - Jump if true
-    jumpIfTrue(num1, num2) {
-        if (num1 != 0) {
-            this.i = num2;
-        } else {
-            this.i += 3;
-        }
-    }
-
-    // Opcode 6 - Jump if false
-    jumpIfFalse(num1, num2) {
-        if (num1 === 0) {
-            this.i = num2;
-        } else {
-            this.i += 3;
-        }
-    }
-
-    // Opcode 7 - less than
-    lessThan(num1, num2, position) {
-        if (num1 < num2) {
-            this.data[position] = 1;
-        } else {
-            this.data[position] = 0;
-        }
-        this.i += 4;
-    }
-
-    // Opcode 8 - equals
-    itEquals(num1, num2, position) {
-        if (num1 === num2) {
-            this.data[position] = 1;
-        } else {
-            this.data[position] = 0;
-        }
-        this.i += 4;
     }
 }
 
