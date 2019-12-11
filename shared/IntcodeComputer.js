@@ -1,23 +1,30 @@
 class IntCodeComputer {
-    constructor(arr, input) {
+    constructor(arr) {
         this.opcode = 0;
-        this.input = input || 1;
-        this.changeInputTo = null;
+        this.input = 0;
+        this.phase = null;
         this.output = 0;
         this.i = 0;
         this.data = arr.slice(0);
         this.resetData = arr.slice(0) || [];
     }
 
-    changeInput(input, inputChangeTo) {
+    setInput(input) {
         this.input = input;
-        this.changeInputTo = inputChangeTo || null;
+    }
+
+    setPhase(phase) {
+        this.phase = phase;
+    }
+
+    setData(arr) {
+        this.data = arr.slice(0);
     }
 
     reset() {
-        this.changeInputTo = null;
+        this.phase = null;
         this.opcode = 0;
-        this.input = 1;
+        this.input = 0;
         this.output = 0;
         this.i = 0;
         this.data = this.resetData.slice(0);
@@ -52,8 +59,7 @@ class IntCodeComputer {
                 this.multiply(num1, num2, position);
                 break;
             case 3:
-                position = this.data[this.i + 1];
-                this.placeInput(position);
+                this.placeInput(this.data[this.i + 1]);
                 break;
             case 4:
                 this.placeOutput(num1);
@@ -95,10 +101,13 @@ class IntCodeComputer {
 
     // Opcode 3
     placeInput(position) {
-        this.data[position] = this.input;
-        if (this.changeInputTo) {
-            this.input = this.changeInputTo;
+        if (this.phase) {
+            this.data[position] = this.phase;
+            this.phase = null;
+        } else {
+            this.data[position] = this.input;
         }
+
         this.i += 2;
     }
 
