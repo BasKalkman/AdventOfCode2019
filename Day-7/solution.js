@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { IntCodeComputer } = require('../shared/IntcodeComputer');
 const data = fs
-    .readFileSync('./example.txt', 'utf-8')
+    .readFileSync('./input.txt', 'utf-8')
     .split(',')
     .map(Number);
 

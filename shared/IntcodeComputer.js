@@ -64,7 +64,7 @@ class IntCodeComputer {
                 break;
             // INPUT
             case 3:
-                if (this.phase) {
+                if (this.phase !== null) {
                     this.data[this.data[this.i + 1]] = this.phase;
                     this.phase = null;
                 } else {
