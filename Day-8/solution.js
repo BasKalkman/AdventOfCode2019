@@ -23,3 +23,21 @@ let leastZeroString = layers.reduce((a, c) => {
 let ones = leastZeroString.match(/1/g).length;
 let twos = leastZeroString.match(/2/g).length;
 console.log('Part 1: ', ones * twos);
+
+// PART 2
+let image = [];
+let dataArr = data.split('');
+
+for (let i = 0; i < dataArr.length; i++) {
+    if (!image[i % (25 * 6)] || image[i % (25 * 6)] === '2') {
+        image[i % (25 * 6)] = dataArr[i];
+    }
+}
+
+let result = image.map(e => {
+    return e === '0' ? ' ' : '#';
+});
+
+while (result.length > 0) {
+    console.log(result.splice(0, 25).join(''));
+}
